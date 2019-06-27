@@ -15,4 +15,7 @@ public interface CmsPageRespository extends MongoRepository<CmsPage,String> {
     int countBySiteIdAndPageType(String siteId,String pageType);
     //根据站点和页面类型分类查询
     Page<CmsPage> findBySiteIdAndPageType(String siteId, String pageType, Pageable pageable);
+
+    //根据页面名称、站点id、页面访问路径（webpath）查询页面
+    CmsPage findByPageNameAndSiteIdAndPageWebPath(String pageName,String siteId,String pageWebPath);
 }

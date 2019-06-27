@@ -7,9 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -73,4 +71,33 @@ public class CmsPageRespositoryTest {
             cmsPageRespository.save(cmsPage);
         }
     }
+
+    //自定义条件查询
+    @Test
+    public void  testfindAll(){
+
+        //条件匹配器
+        ExampleMatcher exampleMatcher = ExampleMatcher.matching();
+        exampleMatcher = exampleMatcher.withMatcher("pageAliase", ExampleMatcher.GenericPropertyMatchers.contains());
+        //页面别名模糊查询，需要自定义字符串的匹配器实现模糊查询
+        //ExampleMatcher.GenericPropertyMatchers.contains() 包含
+        //ExampleMatcher.GenericPropertyMatchers.startWith() 开头匹配
+        //条件值
+        CmsPage cmsPage = new CmsPage();
+        //站点id
+        cmsPage.setSiteId("5a751fab6abb5044e0d19ea1");
+        //模板id
+        cmsPage.setTemplateId("5a962c16b00ffc514038fafd");
+        //页面别名
+        cmsPage.setPageAliase("分类导航");
+
+        //创建条件实例
+        Example<CmsPage> example = Example.of(cmsPage, exampleMatcher);
+        Pageable pageable = new  PageRequest(0,10);
+        Page<CmsPage> all = cmsPageRespository.findAll(example, pageable);
+        System.out.println(all.getContent());
+        System.out.println(all.getTotalElements());
+    }
+
+
 }
